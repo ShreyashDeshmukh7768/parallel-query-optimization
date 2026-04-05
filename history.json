@@ -1,0 +1,66 @@
+[
+    {
+        "Dataset Size": 500000,
+        "Processes": 4,
+        "Sequential Time": 1.3383,
+        "Parallel Time": 1.2738,
+        "Speedup": 1.05,
+        "Timestamp": "2026-04-05 22:33:07"
+    },
+    {
+        "Dataset Size": 400000,
+        "Processes": 4,
+        "Sequential Time": 1.0633,
+        "Parallel Time": 0.8916,
+        "Speedup": 1.19,
+        "Timestamp": "2026-04-05 22:33:25"
+    },
+    {
+        "Dataset Size": 300000,
+        "Processes": 4,
+        "Sequential Time": 0.813,
+        "Parallel Time": 0.8472,
+        "Speedup": 0.96,
+        "Timestamp": "2026-04-05 22:39:49"
+    },
+    {
+        "Dataset Size": 700000,
+        "Processes": 4,
+        "Sequential Time": 1.8556,
+        "Parallel Time": 1.2693,
+        "Speedup": 1.46,
+        "Timestamp": "2026-04-05 22:40:01"
+    },
+    {
+        "Dataset Size": 800000,
+        "Processes": 4,
+        "Sequential Time": 2.1332,
+        "Parallel Time": 1.356,
+        "Speedup": 1.57,
+        "Timestamp": "2026-04-05 22:40:21"
+    },
+    {
+        "Dataset Size": 200000,
+        "Processes": 4,
+        "Sequential Time": 0.549,
+        "Parallel Time": 0.6838,
+        "Speedup": 0.8,
+        "Timestamp": "2026-04-05 22:40:36"
+    },
+    {
+        "Dataset Size": 200000,
+        "Processes": 2,
+        "Sequential Time": 0.5588,
+        "Parallel Time": 0.7412,
+        "Speedup": 0.75,
+        "Timestamp": "2026-04-05 22:40:42"
+    },
+    {
+        "Dataset Size": 600000,
+        "Processes": 2,
+        "Sequential Time": 1.6277,
+        "Parallel Time": 1.4371,
+        "Speedup": 1.13,
+        "Timestamp": "2026-04-05 22:40:53"
+    }
+]

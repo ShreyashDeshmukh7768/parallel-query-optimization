@@ -2,12 +2,33 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import time
+import json
+import os
+from datetime import datetime
 
 from data_generator import generate_dataset
 from sequential import process_sequential
 from parallel import process_parallel
 
 st.set_page_config(page_title="Parallel DB Optimizer", layout="wide", page_icon="⚡")
+
+HISTORY_FILE = "history.json"
+
+def load_history():
+    if os.path.exists(HISTORY_FILE):
+        try:
+            with open(HISTORY_FILE, "r") as f:
+                return json.load(f)
+        except:
+            return []
+    return []
+
+def save_history(history):
+    with open(HISTORY_FILE, "w") as f:
+        json.dump(history, f, indent=4)
+
+if "history" not in st.session_state:
+    st.session_state.history = load_history()
 
 def show_gauge(speedup):
     """Generates a gauge-style visualization using Plotly."""
@@ -127,6 +148,18 @@ def run_experiment(dataset_size, num_cores):
         else:
             r_match.error("❌ **Data Output Matching:** False")
 
+    # Append to experiment history
+    run_record = {
+        "Dataset Size": dataset_size,
+        "Processes": num_cores,
+        "Sequential Time": round(seq_time, 4),
+        "Parallel Time": round(par_time, 4),
+        "Speedup": round(speedup, 2),
+        "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    st.session_state.history.append(run_record)
+    save_history(st.session_state.history)
+
 
 # ==========================================
 # MAIN UI DRIVER
@@ -147,3 +180,29 @@ if run_button:
     run_experiment(dataset_size, num_cores)
 else:
     st.info("👈 Please select your configuration in the sidebar and click **Run Experiment**.")
+
+st.markdown("---")
+
+with st.expander("View Past Runs", expanded=False):
+    st.subheader("Experiment History")
+    if st.session_state.history:
+        df_history = pd.DataFrame(st.session_state.history)
+        st.dataframe(df_history, use_container_width=True)
+        
+        st.subheader("Performance Comparison Graph")
+        fig = go.Figure()
+        
+        # Use simple numeric index for x-axis to represent runs
+        x_vals = [f"Run {i+1}" for i in range(len(df_history))]
+        
+        fig.add_trace(go.Scatter(x=x_vals, y=df_history["Sequential Time"], mode='lines+markers', name='Sequential Time'))
+        fig.add_trace(go.Scatter(x=x_vals, y=df_history["Parallel Time"], mode='lines+markers', name='Parallel Time'))
+        fig.update_layout(xaxis_title="Run Number", yaxis_title="Execution Time (sec)", hovermode="x unified")
+        st.plotly_chart(fig, use_container_width=True)
+        
+        if st.button("Clear History"):
+            st.session_state.history = []
+            save_history(st.session_state.history)
+            st.rerun()
+    else:
+        st.info("No past runs recorded yet.")
